@@ -6,8 +6,6 @@ on:
   push:
     branches:
       - 'main'
-    paths:
-      - '/**' # Trigger the workflow only if changes are made in the k8s/ directory or its subdirectories
 
 permissions:
   id-token: write # This is required for requesting the JWT
