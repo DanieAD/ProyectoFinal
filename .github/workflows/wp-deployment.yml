@@ -1,0 +1,63 @@
+# This is a basic workflow to deploy Wordpress in AKS Cluster
+
+
+# Indicates when the workflow is triggered
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - '/**' # Trigger the workflow only if changes are made in the k8s/ directory or its subdirectories
+
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read  # This is required for actions/checkout
+
+
+# Set ENVIRONMENT variables
+env:
+ rg_name: aks-rg
+ aks_cluster_name: aks-wp
+
+      
+# List of jobs/actions the workflow is going to do
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+
+    steps:
+      - name: Checkout 
+        uses: actions/checkout@v3
+      
+          
+        # Set AKS context to connect  
+      -  name: Azure Login
+         uses: Azure/login@v1.4.6
+         with:
+           client-id: ${{ secrets.AZURE_CLIENT_ID }}
+           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    
+      -  name: Azure Kubernetes set context
+         uses: Azure/aks-set-context@v3.2
+         with:
+            # Azure credentials i.e. output of `az ad sp create-for-rbac --sdk-auth`
+           # creds: ${{ secrets.AZURE_CREDENTIALS }}
+            # Resource Group Name
+            resource-group: ${{ env.rg_name }}
+            # AKS Cluster Name
+            cluster-name: ${{ env.aks_cluster_name }}
+            
+       # Deploy to k8s cluster
+      - name: Deploy to Kubernetes cluster
+        uses: Azure/k8s-deploy@v4.9
+        with:        
+          # Path to the manifest files which will be used for deployment.
+          manifests: |
+            deploymentMySQL.yaml
+            deploymentWP.yaml
+            service.yaml
+            volumeMySQL.yaml
+            volumeWP.yaml
+          action: deploy
