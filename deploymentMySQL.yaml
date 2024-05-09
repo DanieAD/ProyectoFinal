@@ -34,8 +34,8 @@ spec:
         - containerPort: 3306
         volumeMounts:
           - mountPath: "/mnt/"
-            name: mivolumensql   
+            name: mysqlvolume   
       volumes:
-      - name: mivolumensql
+      - name: mysqlvolume
         persistentVolumeClaim:
-          claimName: mipvcsql     
+          claimName: pvcmysql     

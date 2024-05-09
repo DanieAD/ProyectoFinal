@@ -15,6 +15,13 @@ spec:
       containers:
       - name: wordpresscontainer
         image: wordpress:6.4.3-apache
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 300m
+            memory: 512Mi
         env:
         - name: WORDPRESS_DB_HOST
           value: servicio-mysql
@@ -29,8 +36,8 @@ spec:
         - containerPort: 80
         volumeMounts:
           - mountPath: "/mnt/"
-            name: mivolumenwp   
+            name: wordpressvolume   
       volumes:
-      - name: mivolumenwp
+      - name: wordpressvolume
         persistentVolumeClaim:
-          claimName: mipvcwp     
+          claimName: pvcwordpress     
