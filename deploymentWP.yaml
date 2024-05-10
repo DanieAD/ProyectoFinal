@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: wordpresscontainer
-        image: wordpress:6.4.3-apache
+        image: daniead/imagenwordpress:v1
         resources:
           requests:
             cpu: 100m
