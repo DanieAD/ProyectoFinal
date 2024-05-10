@@ -62,5 +62,5 @@ jobs:
             volumeMySQL.yaml
             volumeWP.yaml
             hpa.yaml
-            secret.yaml
+            providersecretclass.yaml
           action: deploy
