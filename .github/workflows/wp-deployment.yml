@@ -3,6 +3,7 @@
 
 # Indicates when the workflow is triggered
 on:
+  workflow_dispatch:
   push:
     branches:
       - 'main'
@@ -60,4 +61,6 @@ jobs:
             service.yaml
             volumeMySQL.yaml
             volumeWP.yaml
+            hpa.yaml
+            secret.yaml
           action: deploy
