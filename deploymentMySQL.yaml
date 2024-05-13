@@ -1,47 +1,55 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: deploymentmysql
+  name: mysql-wordpress
+  labels:
+    app: wordpress
 spec:
-  replicas: 1
   selector:
     matchLabels:
-      app: mysql 
+      app: wordpress
+      tier: mysql
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
-        app: mysql
+        app: wordpress
+        tier: mysql
     spec:
       containers:
-      - name: mysqlcontainer
-        image: mysql:8.3
+      - image: mysql:8.3
+        name: mysql
         env:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
               name: dbsecrets
               key: kv-wordpress
-        - name: MYSQL_USER
-          value: wordpress
         - name: MYSQL_PASSWORD
           valueFrom:
             secretKeyRef:
               name: dbsecrets
-              key: kv-wordpress
+              key: kv-wordpress              
         - name: MYSQL_DATABASE
+          value: wordpress
+        - name: MYSQL_USER
           value: wordpress
         ports:
         - containerPort: 3306
+          name: mysql
         volumeMounts:
-          - mountPath: "/mnt/"
-            name: mysqlvolume   
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+        - name: akv-volume 
+          mountPath: /mnt/secrets-store          
       volumes:
-      - name: mysqlvolume
+      - name: mysql-persistent-storage
         persistentVolumeClaim:
-          claimName: pvcmysql     
+          claimName: mysql-pv-claim
       - name: akv-volume
         csi:
           driver: secrets-store.csi.k8s.io
           readOnly: true
           volumeAttributes:
-            secretProviderClass: "my-akv-class"
+            secretProviderClass: "my-akv-class"               

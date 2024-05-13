@@ -1,20 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: deploymentwp
+  name: wordpress
+  labels:
+    app: wordpress
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: wordpress
+      tier: frontend
+  strategy:
+    type: RollingUpdate
   template:
     metadata:
       labels:
         app: wordpress
+        tier: frontend
     spec:
       containers:
-      - name: wordpresscontainer
-        image: wordpress:6.4.3-apache
+      - image: wordpress:6.4.3-apache
+        name: wordpress
         resources:
           requests:
             cpu: 100m
@@ -24,8 +29,8 @@ spec:
             memory: 512Mi
         env:
         - name: WORDPRESS_DB_HOST
-          value: servicio-mysql
-        - name: WORDPRESS_DB_PASSWORD  
+          value: mysql-wordpress
+        - name: WORDPRESS_DB_PASSWORD
           valueFrom:
             secretKeyRef:
               name: dbsecrets
@@ -34,10 +39,20 @@ spec:
           value: wordpress
         ports:
         - containerPort: 80
+          name: wordpress
         volumeMounts:
-          - mountPath: "/var/www/html"
-            name: wordpressvolume   
+        - name: wordpress-persistent-storage
+          mountPath: /var/www/html
+        - name: akv-volume 
+          mountPath: /mnt/secrets-store
       volumes:
-      - name: wordpressvolume
+      - name: wordpress-persistent-storage
         persistentVolumeClaim:
-          claimName: pvcwordpress     
+          claimName: wp-pv-claim
+      - name: akv-volume
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "my-akv-class"      
+      
