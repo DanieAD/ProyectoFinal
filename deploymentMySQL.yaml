@@ -39,3 +39,9 @@ spec:
       - name: mysqlvolume
         persistentVolumeClaim:
           claimName: pvcmysql     
+      - name: akv-volume
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "my-akv-class"
