@@ -1,12 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: servicio-wordpress
+  name: wordpress
+  labels:
+    app: wordpress
 spec:
+  ports:
+    - port: 80
   selector:
     app: wordpress
-  ports:
-  - port: 80
+    tier: frontend
   type: LoadBalancer
 
 ---
@@ -14,10 +17,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: servicio-mysql
+  name: mysql-wordpress
+  labels:
+    app: wordpress
 spec:
-  selector:
-    app: mysql
   ports:
-  - port: 3306
+    - port: 3306
+  selector:
+    app: wordpress
+    tier: mysql
   clusterIP: None
