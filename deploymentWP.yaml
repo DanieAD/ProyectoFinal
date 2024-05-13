@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: wordpresscontainer
-        image: daniead/imagenwordpress:v1
+        image: wordpress:6.4.3-apache
         resources:
           requests:
             cpu: 100m
@@ -35,7 +35,7 @@ spec:
         ports:
         - containerPort: 80
         volumeMounts:
-          - mountPath: "/mnt/"
+          - mountPath: "/var/www/html"
             name: wordpressvolume   
       volumes:
       - name: wordpressvolume
