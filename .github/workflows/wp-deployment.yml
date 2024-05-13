@@ -57,8 +57,8 @@ jobs:
             deploymentMySQL.yaml
             deploymentWP.yaml
             service.yaml
-            volumeMySQL.yaml
-            volumeWP.yaml
+            pvc.yaml
+            test-pod-akv.yaml
             hpa.yaml
             secretproviderclass.yaml
           action: deploy
