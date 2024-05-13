@@ -29,7 +29,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: my-secret
-              key: password
+              key: kv-wordpress
         - name: WORDPRESS_DB_USER
           value: wordpress
         ports:

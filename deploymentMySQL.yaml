@@ -20,14 +20,14 @@ spec:
           valueFrom:
             secretKeyRef:
               name: my-secret
-              key: password
+              key: kv-wordpress
         - name: MYSQL_USER
           value: wordpress
         - name: MYSQL_PASSWORD
           valueFrom:
             secretKeyRef:
               name: my-secret
-              key: password
+              key: kv-wordpress
         - name: MYSQL_DATABASE
           value: wordpress
         ports:
