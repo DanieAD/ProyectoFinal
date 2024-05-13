@@ -58,7 +58,6 @@ jobs:
             deploymentWP.yaml
             service.yaml
             pvc.yaml
-            test-pod-akv.yaml
             hpa.yaml
             secretproviderclass.yaml
           action: deploy
