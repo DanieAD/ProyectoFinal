@@ -11,6 +11,7 @@ spec:
     app: wordpress
     tier: frontend
   type: LoadBalancer
+  loadBalancerIP: 20.231.110.83
 
 ---
 
