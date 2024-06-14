@@ -60,4 +60,5 @@ jobs:
             pvc.yaml
             hpa.yaml
             secretproviderclass.yaml
+            demo-app.yaml
           action: deploy
